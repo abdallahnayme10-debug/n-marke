@@ -1,0 +1,10 @@
+# Normalisation des fins de ligne (Windows → LF pour le déploiement Linux/Vercel)
+* text=auto eol=lf
+
+# Fichiers binaires
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.svg text

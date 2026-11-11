@@ -1,0 +1,29 @@
+# Hébergement autonome de N-marke (SQLite + volume persistant).
+# Usage : docker compose up -d --build
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: "file:/data/nmarke.db"
+      JWT_SECRET: "${JWT_SECRET:-change-moi-en-production}"
+      NEXT_PUBLIC_BASE_URL: "${NEXT_PUBLIC_BASE_URL:-http://localhost:3000}"
+      OWNER_PASSWORD: "${OWNER_PASSWORD:-nmarke-owner-2026}"
+      SMTP_HOST: "${SMTP_HOST:-}"
+      SMTP_PORT: "${SMTP_PORT:-587}"
+      SMTP_USER: "${SMTP_USER:-}"
+      SMTP_PASS: "${SMTP_PASS:-}"
+      MAIL_FROM: "${MAIL_FROM:-N-marke <no-reply@nmarke.com>}"
+      MVOLA_MERCHANT_NUMBER: "${MVOLA_MERCHANT_NUMBER:-+2694909765}"
+      POKERA_NUMBER: "${POKERA_NUMBER:-}"
+      MVOLA_CONSUMER_KEY: "${MVOLA_CONSUMER_KEY:-}"
+      MVOLA_CONSUMER_SECRET: "${MVOLA_CONSUMER_SECRET:-}"
+      GOOGLE_CLIENT_ID: "${GOOGLE_CLIENT_ID:-}"
+      GOOGLE_CLIENT_SECRET: "${GOOGLE_CLIENT_SECRET:-}"
+    volumes:
+      - nmarke-data:/data
+    restart: unless-stopped
+
+volumes:
+  nmarke-data:
