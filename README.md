@@ -72,9 +72,18 @@ légaux. Les secrets sont **chiffrés** en base (jamais en clair).
 
 Pour publier N-marke sur Internet, choisis **une** des 3 options ci-dessous.
 
-> ⚠️ **PostgreSQL** : en production, remplace SQLite par PostgreSQL en changeant
-> **une seule ligne** dans `prisma/schema.prisma` :
-> `provider = "sqlite"` → `provider = "postgresql"`, puis `npm run db:push`.
+> ### ⚠️ ÉTAPE OBLIGATOIRE avant Vercel/Railway : passer à PostgreSQL
+> Vercel n'accepte **pas** SQLite. Dans `prisma/schema.prisma`, change **une ligne** :
+> ```
+> provider = "sqlite"      →      provider = "postgresql"
+> ```
+> Puis exécute :
+> ```bash
+> npm install          # régénère le client Prisma
+> npm run db:push      # crée les tables sur PostgreSQL
+> npm run db:seed      # (optionnel) données de démo
+> ```
+> *(SQLite reste le choix par défaut uniquement pour le développement local.)*
 
 ### Option A — Vercel + Neon (recommandé, gratuit pour démarrer)
 

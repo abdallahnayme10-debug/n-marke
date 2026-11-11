@@ -4,8 +4,11 @@ import path from "path";
 import { randomUUID } from "crypto";
 import { requireVerifiedUser } from "@/lib/api";
 import { processListingImage, processAvatar } from "@/lib/image";
+import { uploadToCloudinary } from "@/lib/cloudinary";
 
-// Upload d'image local (développement). En production, brancher Cloudinary.
+// Upload d'image.
+// - En production (Vercel) : envoie sur Cloudinary (système de fichiers en lecture seule).
+// - En local (sans clés Cloudinary) : enregistre dans public/uploads.
 export async function POST(req: Request) {
   const { user, error } = await requireVerifiedUser();
   if (error) return error;
@@ -26,6 +29,13 @@ export async function POST(req: Request) {
       ? await processAvatar(buffer)
       : await processListingImage(buffer, { watermark, position: position as never });
 
+  // 1) Cloudinary si configuré (production)
+  const cloudUrl = await uploadToCloudinary(processed, type === "avatar" ? "nmarke/avatars" : "nmarke/listings");
+  if (cloudUrl) {
+    return NextResponse.json({ ok: true, url: cloudUrl });
+  }
+
+  // 2) Sinon, stockage local (développement)
   const dir = path.join(process.cwd(), "public", "uploads");
   await mkdir(dir, { recursive: true });
   const filename = `${randomUUID()}.jpg`;
