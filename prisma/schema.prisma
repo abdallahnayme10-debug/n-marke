@@ -1,5 +1,5 @@
 // N-marke — Schéma de base de données (Prisma)
-// PostgreSQL (compatible Vercel, Railway, et développement local).
+// PostgreSQL (hébergé dans le cloud, aucune base à installer en local).
 
 generator client {
   provider = "prisma-client-js"
