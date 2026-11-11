@@ -28,7 +28,7 @@ body {
     radial-gradient(circle at 80% 12%, rgba(91, 138, 70, 0.05), transparent 38%);
   background-attachment: fixed;
   color: var(--text);
-  font-family: var(--font-nunito), "Nunito", ui-sans-serif, system-ui, sans-serif;
+  font-family: "Nunito", ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -39,7 +39,7 @@ body {
 }
 
 h1, h2, h3, h4, .font-display {
-  font-family: var(--font-poppins), "Poppins", ui-sans-serif, system-ui, sans-serif;
+  font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
 }
 
 /* Focus clavier doux et accueillant */

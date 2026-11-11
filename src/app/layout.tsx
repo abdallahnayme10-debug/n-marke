@@ -1,19 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Nunito, Poppins } from "next/font/google";
 import "./globals.css";
 import Providers from "./providers";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Onboarding from "@/components/Onboarding";
 import PwaRegister from "@/components/PwaRegister";
-
-const nunito = Nunito({ subsets: ["latin"], variable: "--font-nunito", display: "swap" });
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["500", "600", "700", "800"],
-  variable: "--font-poppins",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "N-marke — Le marché en ligne des Comores",
@@ -48,7 +39,15 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr" suppressHydrationWarning>
-      <body className={`${nunito.variable} ${poppins.variable} min-h-screen`}>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@500;600;700;800&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className="min-h-screen">
         <Providers>
           <div className="flex min-h-screen flex-col">
             <Header />
