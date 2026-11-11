@@ -3,6 +3,8 @@
 Plateforme commerciale en ligne complète pour les Comores : achète, vends et fais-toi
 livrer par moto. Design chaleureux, optimisée mobile et connexion lente, en français.
 
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fabdallahnayme10-debug%2Fn-marke&env=DATABASE_URL,JWT_SECRET,NEXT_PUBLIC_BASE_URL,OWNER_PASSWORD&project-name=n-marke&repository-name=n-marke)
+
 ## 🧰 Stack technique
 
 | Domaine | Technologie |
