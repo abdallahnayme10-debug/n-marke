@@ -52,14 +52,14 @@ export async function searchListings(filters: SearchFilters) {
   if (q && q.trim()) {
     const term = q.trim();
     where.OR = [
-      { title: { contains: term } },
-      { description: { contains: term } },
-      { brand: { contains: term } },
-      { model: { contains: term } },
-      { articleNumber: { contains: term } },
-      { tags: { contains: term } },
-      { category: { name: { contains: term } } },
-      { subcategory: { name: { contains: term } } },
+      { title: { contains: term, mode: "insensitive" } },
+      { description: { contains: term, mode: "insensitive" } },
+      { brand: { contains: term, mode: "insensitive" } },
+      { model: { contains: term, mode: "insensitive" } },
+      { articleNumber: { contains: term, mode: "insensitive" } },
+      { tags: { contains: term, mode: "insensitive" } },
+      { category: { name: { contains: term, mode: "insensitive" } } },
+      { subcategory: { name: { contains: term, mode: "insensitive" } } },
     ];
   }
 
@@ -68,8 +68,8 @@ export async function searchListings(filters: SearchFilters) {
   if (type) where.type = type;
   if (category) where.category = { slug: category };
   if (delivery) where.deliveryAvailable = true;
-  if (brand) where.brand = { contains: brand };
-  if (model) where.model = { contains: model };
+  if (brand) where.brand = { contains: brand, mode: "insensitive" };
+  if (model) where.model = { contains: model, mode: "insensitive" };
   if (featured) {
     where.isFeatured = true;
     where.featuredUntil = { gt: new Date() };

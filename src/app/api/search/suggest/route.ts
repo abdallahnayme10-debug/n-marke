@@ -11,18 +11,18 @@ export async function GET(req: Request) {
 
   const [titles, categories, brands] = await Promise.all([
     prisma.listing.findMany({
-      where: { title: { contains: term }, status: "active" },
+      where: { title: { contains: term, mode: "insensitive" }, status: "active" },
       select: { title: true, slug: true },
       distinct: ["title"],
       take: 6,
     }),
     prisma.category.findMany({
-      where: { name: { contains: term } },
+      where: { name: { contains: term, mode: "insensitive" } },
       select: { name: true, slug: true, icon: true },
       take: 4,
     }),
     prisma.listing.findMany({
-      where: { brand: { contains: term }, status: "active" },
+      where: { brand: { contains: term, mode: "insensitive" }, status: "active" },
       select: { brand: true },
       distinct: ["brand"],
       take: 4,

@@ -36,3 +36,6 @@ next-env.d.ts
 # uploads locaux
 /public/uploads/*
 !/public/uploads/.gitkeep
+
+.vercel
+.env*
