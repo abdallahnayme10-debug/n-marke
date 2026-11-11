@@ -1,17 +1,12 @@
 // N-marke — Schéma de base de données (Prisma)
-// ─────────────────────────────────────────────────────────────────
-// ⚠️ POUR DÉPLOYER SUR VERCEL / RAILWAY (PostgreSQL) :
-//    change la ligne `provider = "sqlite"` ci-dessous en `provider = "postgresql"`,
-//    puis `npm run db:push`. (SQLite ne fonctionne que pour le développement local.)
-//
-// NB : SQLite ne supporte pas les enums => on utilise des String avec valeurs contrôlées.
+// PostgreSQL (compatible Vercel, Railway, et développement local).
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 

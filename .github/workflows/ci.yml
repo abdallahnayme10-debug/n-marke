@@ -1,0 +1,53 @@
+name: CI — Vérifier le build (PostgreSQL)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: nmarke
+          POSTGRES_PASSWORD: nmarke
+          POSTGRES_DB: nmarke
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U nmarke"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgresql://nmarke:nmarke@localhost:5432/nmarke?schema=public
+      JWT_SECRET: ci-secret-de-test
+      NEXT_PUBLIC_BASE_URL: http://localhost:3000
+      NEXT_TELEMETRY_DISABLED: 1
+
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Installer Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Installer les dépendances
+        run: npm ci
+
+      - name: Générer le client Prisma
+        run: npx prisma generate
+
+      - name: Créer les tables (db push)
+        run: npx prisma db push --skip-generate
+
+      - name: Construire l'application
+        run: npm run build

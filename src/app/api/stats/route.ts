@@ -3,6 +3,8 @@ import { prisma } from "@/lib/db";
 import { REGIONS } from "@/lib/constants";
 import { getFreePeriodDaysRemaining, getFreePeriodMode } from "@/lib/billing";
 
+export const dynamic = "force-dynamic";
+
 // Statistiques publiques affichées sur la page d'accueil.
 export async function GET() {
   const [activeListings, users, deliveries, freeDays, freeMode] = await Promise.all([

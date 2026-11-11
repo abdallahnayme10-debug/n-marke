@@ -8,7 +8,7 @@ livrer par moto. Design chaleureux, optimisée mobile et connexion lente, en fra
 | Domaine | Technologie |
 |---|---|
 | Frontend + Backend | **Next.js 14** (App Router, TypeScript) |
-| Base de données | **Prisma** + SQLite (dev) / PostgreSQL (prod) |
+| Base de données | **Prisma** + PostgreSQL |
 | CSS | **Tailwind CSS** (design system chaleureux) |
 | Typographie | **Nunito** + **Poppins** |
 | Auth | JWT (`jose`) + bcrypt + cookies httpOnly |
@@ -29,9 +29,11 @@ npm install
 ```
 
 ### 3. Configurer l'environnement
-Le fichier `.env` existe déjà pour le développement local. Vérifie qu'il contient :
+Le fichier `.env` existe déjà. Renseigne `DATABASE_URL` avec une base PostgreSQL :
+- **Sans Docker** : crée une base gratuite sur [Neon](https://neon.tech) et colle l'URL
+- **Avec Docker** : `docker compose up -d db` (Postgres local)
 ```
-DATABASE_URL="file:./dev.db"
+DATABASE_URL="postgresql://USER:PASSWORD@localhost:5432/nmarke?schema=public"
 JWT_SECRET="..."
 ```
 
@@ -71,30 +73,18 @@ légaux. Les secrets sont **chiffrés** en base (jamais en clair).
 ## 📦 Déploiement en ligne (mise en production)
 
 Pour publier N-marke sur Internet, choisis **une** des 3 options ci-dessous.
-
-> ### ⚠️ ÉTAPE OBLIGATOIRE avant Vercel/Railway : passer à PostgreSQL
-> Vercel n'accepte **pas** SQLite. Dans `prisma/schema.prisma`, change **une ligne** :
-> ```
-> provider = "sqlite"      →      provider = "postgresql"
-> ```
-> Puis exécute :
-> ```bash
-> npm install          # régénère le client Prisma
-> npm run db:push      # crée les tables sur PostgreSQL
-> npm run db:seed      # (optionnel) données de démo
-> ```
-> *(SQLite reste le choix par défaut uniquement pour le développement local.)*
+La base de données est déjà en **PostgreSQL** (compatible Vercel/Railway/Docker).
 
 ### Option A — Vercel + Neon (recommandé, gratuit pour démarrer)
 
-1. Mets le projet sur **GitHub** (compte gratuit).
+1. Mets le projet sur **GitHub** (déjà fait ✅).
 2. Crée un compte **[Vercel](https://vercel.com)** → « Add New Project » → importe ton dépôt GitHub.
 3. Crée une base **[Neon](https://neon.tech)** (PostgreSQL gratuit) → copie l'URL de connexion.
 4. Dans Vercel → **Settings → Environment Variables**, ajoute :
    - `DATABASE_URL` = l'URL Neon (ex : `postgresql://user:pass@host/db`)
    - `JWT_SECRET` = une longue chaîne aléatoire
    - `NEXT_PUBLIC_BASE_URL` = `https://ton-projet.vercel.app`
-   - `OWNER_PASSWORD`, `SMTP_*`, `GOOGLE_CLIENT_*`, `MVOLA_*`…
+   - `OWNER_PASSWORD`, `SMTP_*`, `GOOGLE_CLIENT_*`, `MVOLA_*`, `CLOUDINARY_*`…
 5. Déploie → l'app est en ligne en quelques minutes. 🚀
 
 ### Option B — Railway (tout-en-un)
@@ -111,8 +101,7 @@ git clone <ton-repo> nmarke && cd nmarke
 # Renseigne tes secrets dans un fichier .env puis :
 docker compose up -d --build
 ```
-Le fichier `docker-compose.yml` fourni utilise SQLite avec un volume persistant
-(parfait pour commencer, sans configurer PostgreSQL).
+Le `docker-compose.yml` fourni démarre **PostgreSQL** + l'application ensemble.
 
 ---
 

@@ -1,12 +1,30 @@
-# Hébergement autonome de N-marke (SQLite + volume persistant).
+# Hébergement autonome de N-marke (PostgreSQL + volume persistant).
 # Usage : docker compose up -d --build
 services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: nmarke
+      POSTGRES_PASSWORD: nmarke
+      POSTGRES_DB: nmarke
+    volumes:
+      - nmarke-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nmarke"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
   app:
     build: .
     ports:
       - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
     environment:
-      DATABASE_URL: "file:/data/nmarke.db"
+      DATABASE_URL: "postgresql://nmarke:nmarke@db:5432/nmarke?schema=public"
       JWT_SECRET: "${JWT_SECRET:-change-moi-en-production}"
       NEXT_PUBLIC_BASE_URL: "${NEXT_PUBLIC_BASE_URL:-http://localhost:3000}"
       OWNER_PASSWORD: "${OWNER_PASSWORD:-nmarke-owner-2026}"
@@ -21,9 +39,10 @@ services:
       MVOLA_CONSUMER_SECRET: "${MVOLA_CONSUMER_SECRET:-}"
       GOOGLE_CLIENT_ID: "${GOOGLE_CLIENT_ID:-}"
       GOOGLE_CLIENT_SECRET: "${GOOGLE_CLIENT_SECRET:-}"
-    volumes:
-      - nmarke-data:/data
+      CLOUDINARY_CLOUD_NAME: "${CLOUDINARY_CLOUD_NAME:-}"
+      CLOUDINARY_API_KEY: "${CLOUDINARY_API_KEY:-}"
+      CLOUDINARY_API_SECRET: "${CLOUDINARY_API_SECRET:-}"
     restart: unless-stopped
 
 volumes:
-  nmarke-data:
+  nmarke-db:
